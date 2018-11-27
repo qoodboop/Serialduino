@@ -31,7 +31,7 @@ public class Controller {
                     while (true)
                     {
                         while (comPort.bytesAvailable() == 0)
-                            Thread.sleep(20);
+                            Thread.sleep(200);
 
                         byte[] readBuffer = new byte[comPort.bytesAvailable()];
                         int numRead = comPort.readBytes(readBuffer, readBuffer.length);
