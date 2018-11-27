@@ -34,7 +34,7 @@ public class Controller {
                             Thread.sleep(200);
 
                         byte[] readBuffer = new byte[comPort.bytesAvailable()];
-                        int numRead = comPort.readBytes(readBuffer, readBuffer.length);
+                        int numRead = comPort.readBytes(readBuffer, readBuffer.length); // Je sais pas quoi dire alors j'ecrit ce petit mot
                         //System.out.println("Read " + numRead + " bytes.");
                         //System.out.println("Read " + readBuffer + " bytes.");
                         String s = new String(readBuffer);
