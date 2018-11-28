@@ -7,9 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
@@ -32,7 +30,7 @@ public class Fenetre extends Application {
            }
        });
 
-       //creation du menu deroulant avec affichage des données
+
 
 
        //creation espace pour changer la température
@@ -46,11 +44,20 @@ public class Fenetre extends Application {
        TextField TempFridge =  new TextField();
        grid.add(TempFridge,0,1);
 
+       //creation du menu deroulant avec affichage des données
+       Menu menuVar = new Menu();
+       MenuItem temperature = new MenuItem();
+       MenuItem humidite = new MenuItem();
+       MenuItem pointDeRosee = new MenuItem();
+
+       //Menu déroulant
+       menuVar.getItems().addAll(temperature, humidite, pointDeRosee);
+
 
 
        root.getChildren().add(btn);
        primaryStage.setScene(scene);
-       primaryStage.setVisible(true);
+       primaryStage.se(true);
    }
 
     // fonction qui permet de choisir la température du fridge
