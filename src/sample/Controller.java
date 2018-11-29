@@ -10,8 +10,27 @@ import java.util.concurrent.TimeUnit;
 
 public class Controller {
 
-    float hum ;
-    float temp ;
+    private static float temp ;
+    private static float hum ;
+
+    public static void setHum(float hum) {
+        Controller.hum = hum;
+    }
+
+    public static float getHum() {
+        return hum;
+    }
+
+
+    public static void setTemp(float temp) {
+        Controller.temp = temp;
+    }
+
+    public static float getTemp() {
+        return temp;
+    }
+
+
 
     public void test(){
                         SerialPort comPort = SerialPort.getCommPorts()[0];
@@ -62,10 +81,12 @@ public class Controller {
                                               Matcher m = p.matcher(nextMatch);
                                               if( m.find() ){
                                                   //System.out.println( "-->>" + m.group() );
-                                                  float f = Float.parseFloat(m.group());
-                                                  System.out.println(f);
+                                                   this.temp = Float.parseFloat(m.group());
+                                                  System.out.println(temp);
                                                   System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                                                  System.out.println("TEMPERATURE ======" + getTemp());
                                                   System.out.println("\n");
+
                                               }
                                                 } else if (nextMatch.contains("Humidity = ")){
 
@@ -76,10 +97,11 @@ public class Controller {
                                               Matcher m = p.matcher(nextMatch);
                                               if( m.find() ){
                                                   //  System.out.println( "-->>" + m.group() );
-                                                  float f = Float.parseFloat(m.group());
-                                                  System.out.println(f);
+                                                  this.hum = Float.parseFloat(m.group());
+                                                  System.out.println(hum);
                                                   System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
                                                   System.out.println("\n");
+                                                  System.out.println("HUMIDITé =====" + getHum());
                                               }
                                             }
 
