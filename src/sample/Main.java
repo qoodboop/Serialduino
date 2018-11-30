@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,8 +18,26 @@ import java.util.concurrent.TimeUnit;
 
 public class Main extends Application implements Observer {
 
-                private static XYChart.Series seriesHumidity;
+    public static XYChart.Series getSeriesHumidity() {
+        return seriesHumidity;
+    }
+
+    public static void setSeriesHumidity(XYChart.Series seriesHumidity) {
+        Main.seriesHumidity = seriesHumidity;
+    }
+
+    public static XYChart.Series getSeriesTemperature() {
+        return seriesTemperature;
+    }
+
+    public static void setSeriesTemperature(XYChart.Series seriesTemperature) {
+        Main.seriesTemperature = seriesTemperature;
+    }
+
+    private static XYChart.Series seriesHumidity;
                 private static XYChart.Series seriesTemperature;
+
+
 
     public static void main(String[] args) {
                     launch(args);
@@ -50,26 +69,32 @@ public class Main extends Application implements Observer {
                     areachart.getData().addAll(seriesHumidity,seriesTemperature);
                     primaryStage.setScene(scene);
                     primaryStage.show();
-                    TimeUnit.SECONDS.sleep(5); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
+                    TimeUnit.SECONDS.sleep(2); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
 
 
                     Commduino comm = new Commduino(this);
                     Thread t = new Thread(comm);
                     t.start();
-                    //Controller COntro = new Controller();
-                    //COntro.test();
 
-                    //COntro.TEST();
+                    for (int i=0;i<5;i++){
+                        TimeUnit.SECONDS.sleep(2); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
 
-                        seriesHumidity.getData().add(new XYChart.Data(1,16));
+                        seriesHumidity.getData().add(new XYChart.Data(i, comm.getHum()));
+                        seriesHumidity.getData().add(new XYChart.Data(i, comm.getHum()));
+
+                        seriesTemperature.getData().add(new XYChart.Data(i, comm.getTemp()));
+                        seriesTemperature.getData().add(new XYChart.Data(i, comm.getTemp()));
+                    }
+
+                       /* seriesHumidity.getData().add(new XYChart.Data(1,16));
                         seriesHumidity.getData().add(new XYChart.Data(10, 10));
                         seriesHumidity.getData().add(new XYChart.Data(20, 3));
-                        seriesHumidity.getData().add(new XYChart.Data(30, 8));
+                        seriesHumidity.getData().add(new XYChart.Data(30, 89));
 
                         seriesTemperature.getData().add(new XYChart.Data(1,2));
                         seriesTemperature.getData().add(new XYChart.Data(10, 30));
                         seriesTemperature.getData().add(new XYChart.Data(20, 9));
-                        seriesTemperature.getData().add(new XYChart.Data(30, 20));
+                        seriesTemperature.getData().add(new XYChart.Data(30, 200));*/
 
 
                 }
@@ -78,6 +103,7 @@ public class Main extends Application implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         System.out.println("blzalfvedb");
-
-    }
-}
+        //Commduino com2 = new Commduino(this) ;
+        //this.seriesHumidity.getData().add(new XYChart.Data(1,16));
+        //this.seriesTemperature.getData().add(new XYChart.Data(1,2));
+}}
