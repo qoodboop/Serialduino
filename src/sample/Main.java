@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -12,11 +15,25 @@ import javafx.scene.chart.XYChart;
 
 import javafx.stage.Stage;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main extends Application implements Observer {
+
+
+    private static XYChart.Series seriesHumidity;
+    private static XYChart.Series seriesTemperature;
+    private float temperature ;
+
+
+
+    private float humidity ;
+
 
     public static XYChart.Series getSeriesHumidity() {
         return seriesHumidity;
@@ -33,10 +50,31 @@ public class Main extends Application implements Observer {
     public static void setSeriesTemperature(XYChart.Series seriesTemperature) {
         Main.seriesTemperature = seriesTemperature;
     }
+    public float getTemperature() {
+        return temperature;
+    }
 
-    private static XYChart.Series seriesHumidity;
-                private static XYChart.Series seriesTemperature;
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+    }
 
+    public float getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(float humidity) {
+        this.humidity = humidity;
+    }
+
+    public float getSecond() {
+        return second;
+    }
+
+    public void setSecond() {
+        second += 1;
+    }
+
+    float second  ;
 
 
     public static void main(String[] args) {
@@ -44,7 +82,9 @@ public class Main extends Application implements Observer {
                     System.out.println("TEST");
 
                 }
-
+   // private static float second ;
+    private static float minute;
+    private static float hour ;
 
                 @Override
                 public void start(Stage primaryStage) throws Exception{
@@ -52,16 +92,17 @@ public class Main extends Application implements Observer {
                     primaryStage.setTitle("Area Chart ");
                     //primaryStage.setScene(new Scene(root, 300, 275));
 
-                    final NumberAxis xAxis = new NumberAxis(1, 31, 1);
-                    final NumberAxis yAxis = new NumberAxis();
+                    final NumberAxis xAxis = new NumberAxis(1, 81, 3);
+                    final NumberAxis yAxis = new NumberAxis(0,100,5);
                     final AreaChart<Number,Number> areachart = new AreaChart<Number,Number>(xAxis,yAxis);
-                    areachart.setTitle("controle de la temperature");
+                    areachart.setTitle("control de la temperature");
 
                     seriesHumidity = new XYChart.Series();
                     seriesHumidity.setName("Humidity");
 
                      seriesTemperature= new XYChart.Series();
-                    seriesTemperature.setName("Temperature");
+                     seriesTemperature.setName("Temperature");
+
 
 
                     Scene scene  = new Scene(areachart,800,600);
@@ -76,33 +117,45 @@ public class Main extends Application implements Observer {
                     Thread t = new Thread(comm);
                     t.start();
 
-                    for (int i=0;i<5;i++){
-                        TimeUnit.SECONDS.sleep(2); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
 
-                        seriesHumidity.getData().add(new XYChart.Data(i, comm.getHum()));
-                        seriesHumidity.getData().add(new XYChart.Data(i, comm.getHum()));
-
-                        seriesTemperature.getData().add(new XYChart.Data(i, comm.getTemp()));
-                        seriesTemperature.getData().add(new XYChart.Data(i, comm.getTemp()));
-                    }
-
-                       /* seriesHumidity.getData().add(new XYChart.Data(1,16));
-                        seriesHumidity.getData().add(new XYChart.Data(10, 10));
-                        seriesHumidity.getData().add(new XYChart.Data(20, 3));
-                        seriesHumidity.getData().add(new XYChart.Data(30, 89));
-
-                        seriesTemperature.getData().add(new XYChart.Data(1,2));
-                        seriesTemperature.getData().add(new XYChart.Data(10, 30));
-                        seriesTemperature.getData().add(new XYChart.Data(20, 9));
-                        seriesTemperature.getData().add(new XYChart.Data(30, 200));*/
 
 
                 }
 
 
     @Override
-    public void update(Observable o, Object arg) {
-        System.out.println("blzalfvedb");
+    public void update(Observable o, Object args) {
+        setSecond();
+        //System.out.println("Update ! " + args);
+       //Platform.runLater(() -> seriesHumidity.getData().add(new XYChart.Data(LocalDateTime.now().getSecond(), 30)));
+        //String arg =  new String(args);
+        String arg = String.valueOf(args);  //method 1
+       //System.out.println(getSecond());
+        // String arg = "" + args;   //method 2
+        // String arg = args.toString();
+        System.out.println(arg);
+            //Pattern T = Pattern.compile("[-+]?([0-9]Temperature = *\\.[0-9]+|[0-9]+)  .* [-+]?([0-9]Humidity = *\\.[0-9]+|[0-9]+) ");
+            Pattern T = Pattern.compile(" [0-9]*\\.[0-9]+");
+           // Pattern H = Pattern.compile("[-+]?([0-9]Humidity = *\\.[0-9]+|[0-9]+)");
+            Matcher t = T.matcher(arg);
+            //Matcher h = H.matcher(arg);
+            if( t.find() ){
+                temperature = Float.parseFloat(t.group());
+             //   System.out.println(temperature);
+                int fin =t.end();
+                t.find(fin);
+                if(t.find(fin)) {
+                    humidity = Float.parseFloat(t.group());
+               //     System.out.println(humidity);
+                }
+            }
+           /* if( h.find() ){
+                this.humidity = Float.parseFloat(h.group());
+                System.out.println(this.humidity);
+            }*/
+        //System.out.println(this.humidity + " TEST " + this.temperature);
+        Platform.runLater(() -> this.seriesHumidity.getData().add(new XYChart.Data(this.getSecond(), getHumidity())));
+        Platform.runLater(() -> this.seriesTemperature.getData().add(new XYChart.Data(this.getSecond() ,getTemperature())));
         //Commduino com2 = new Commduino(this) ;
         //this.seriesHumidity.getData().add(new XYChart.Data(1,16));
         //this.seriesTemperature.getData().add(new XYChart.Data(1,2));
