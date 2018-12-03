@@ -116,10 +116,6 @@ public class Main extends Application implements Observer {
                     Commduino comm = new Commduino(this);
                     Thread t = new Thread(comm);
                     t.start();
-
-
-
-
                 }
 
 
@@ -133,26 +129,35 @@ public class Main extends Application implements Observer {
        //System.out.println(getSecond());
         // String arg = "" + args;   //method 2
         // String arg = args.toString();
-        System.out.println(arg);
-            //Pattern T = Pattern.compile("[-+]?([0-9]Temperature = *\\.[0-9]+|[0-9]+)  .* [-+]?([0-9]Humidity = *\\.[0-9]+|[0-9]+) ");
-            Pattern T = Pattern.compile(" [0-9]*\\.[0-9]+");
-           // Pattern H = Pattern.compile("[-+]?([0-9]Humidity = *\\.[0-9]+|[0-9]+)");
-            Matcher t = T.matcher(arg);
+        //System.out.println(arg);
+            Pattern T = Pattern.compile("Temperature = [0-9]+\\..[0-9]");
+            Pattern H = Pattern.compile("Humidity = [0-9]+\\..[0-9]");
+
+        Matcher t = T.matcher(arg);
+        Matcher h = H.matcher(arg);
+
             //Matcher h = H.matcher(arg);
             if( t.find() ){
-                temperature = Float.parseFloat(t.group());
-             //   System.out.println(temperature);
-                int fin =t.end();
-                t.find(fin);
-                if(t.find(fin)) {
-                    humidity = Float.parseFloat(t.group());
-               //     System.out.println(humidity);
+                Pattern NB = Pattern.compile(" [0-9]*\\.[0-9]+");
+                Matcher nb = NB.matcher(t.group());
+                System.out.println("t.find");
+                if(nb.find()){
+                    temperature = Float.parseFloat(nb.group());
+               //     System.out.println("temperature = " + nb.group());
+
                 }
+            } ;
+
+            if( h.find() ){
+                System.out.println("h.find");
+                Pattern NB2 = Pattern.compile(" [0-9]*\\.[0-9]+");
+                Matcher nb2 = NB2.matcher(h.group());
+                if(nb2.find()){
+                    humidity = Float.parseFloat(nb2.group());
+                //    System.out.println("humidity = " +nb2.group());
+                }
+
             }
-           /* if( h.find() ){
-                this.humidity = Float.parseFloat(h.group());
-                System.out.println(this.humidity);
-            }*/
         //System.out.println(this.humidity + " TEST " + this.temperature);
         Platform.runLater(() -> this.seriesHumidity.getData().add(new XYChart.Data(this.getSecond(), getHumidity())));
         Platform.runLater(() -> this.seriesTemperature.getData().add(new XYChart.Data(this.getSecond() ,getTemperature())));
