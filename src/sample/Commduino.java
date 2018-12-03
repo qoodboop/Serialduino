@@ -42,16 +42,18 @@ public class Commduino extends Observable implements Runnable {
                 while (comPort.bytesAvailable() == 0)
                     Thread.sleep(200);
                 //TimeUnit.SECONDS.sleep(1); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
-                byte[] readBuffer = new byte[comPort.bytesAvailable()];
-                //byte[] readBuffer = new byte[30];
+                //byte[] readBuffer = new byte[comPort.bytesAvailable()];
+                byte[] readBuffer = new byte[30];
                 int numRead = comPort.readBytes(readBuffer, readBuffer.length);
                 //System.out.println("Read " + numRead + " bytes.");
                //System.out.println("Read " + readBuffer + " bytes.");
                 String s = new String(readBuffer);
-                TimeUnit.SECONDS.sleep(1); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
+                //TimeUnit.SECONDS.sleep(1); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
                 msg = s ;
                 //msg = "\n  Temperature = " + this.getTemp() + " \n " + " Humidity = " + this.getHum() + "\n ";
                 setChanged();
+                //TimeUnit.SECONDS.sleep(1); // METTRE une valeur qui est en opposition de phase avec les envois de l'arduino
+
                 notifyObservers(msg);
             }
         }
