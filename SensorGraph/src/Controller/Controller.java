@@ -2,6 +2,7 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.EventListener;
 import java.util.Scanner;
@@ -88,18 +89,22 @@ public class Controller implements EventListener{
 									calculPdr(model.getTemp(), model.getHum());
 									frame.getSeries().add(x++, temp);
 									frame.getSeries2().add(x++, model.getPdr());
-									PrintWriter output = new PrintWriter(chosenPort.getOutputStream());
+									OutputStream output = chosenPort.getOutputStream();
+									String stop = "STOP";
+									String go = "GO";
 									if(model.getCon()>model.getTemp()){
 										if(c==0){
 											System.out.println("STOP");
-											output.println("STOP");
+											output.write(stop.getBytes());
+											output.flush();
 											c = 1;
 										}
 									}
 									if(model.getCon()<=model.getTemp()){
 										if(c==1){
 											System.out.println("GO");
-											output.println("GO");
+											output.write(go.getBytes());
+											output.flush();
 											c = 0;
 										}
 									}
