@@ -2,6 +2,7 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.EventListener;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Controller implements EventListener{
 	SerialPort chosenPort;
 	static int x = 0;
 	static int temp = 20;
-	static int hum = 50;
+	static int hum = 60;
 	private Model model;
 	
 	public Controller(){
@@ -23,13 +24,29 @@ public class Controller implements EventListener{
 		model = new Model();
 		SerialPort[] portNames = SerialPort.getCommPorts();
 		for(int i = 0; i < portNames.length; i++)
-			frame.getDropdown().addItem(portNames[i].getSystemPortName());
+		frame.getDropdown().addItem(portNames[i].getSystemPortName());
 		addEventListener();
 		frame.setVisible(true);
 	}
 	
 	
 	public void addEventListener(){
+		frame.getButton_1().addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				frame.setCon(model.getCon()-1);
+				model.setCon(model.getCon()-1);				
+			}});
+		frame.getButton_2().addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub				
+				frame.setCon(model.getCon()+1);
+				model.setCon(model.getCon()+1);
+			}});
 		frame.getButton().addActionListener(new ActionListener() {
 			
 			@Override
@@ -47,6 +64,7 @@ public class Controller implements EventListener{
 					Thread thread = new Thread(){
 						@Override public void run() {
 							Scanner scanner = new Scanner(chosenPort.getInputStream());
+							int c = 0;
 							while(scanner.hasNextLine()) {
 								try {
 									String line = scanner.nextLine();
@@ -70,6 +88,21 @@ public class Controller implements EventListener{
 									calculPdr(model.getTemp(), model.getHum());
 									frame.getSeries().add(x++, temp);
 									frame.getSeries2().add(x++, model.getPdr());
+									PrintWriter output = new PrintWriter(chosenPort.getOutputStream());
+									if(model.getCon()>model.getTemp()){
+										if(c==0){
+											System.out.println("STOP");
+											output.println("STOP");
+											c = 1;
+										}
+									}
+									if(model.getCon()<=model.getTemp()){
+										if(c==1){
+											System.out.println("GO");
+											output.println("GO");
+											c = 0;
+										}
+									}
 									frame.repaint();
 								} catch(Exception e) {}
 							}
@@ -80,9 +113,16 @@ public class Controller implements EventListener{
 					Thread thread2 = new Thread(){
 						@Override public void run() {
 							Scanner scanner2 = new Scanner(chosenPort.getInputStream());
+							int i = 0;
 							while(scanner2.hasNextLine()){
 								if(model.getPdr()>(model.getTemp()-1)){
-								frame.alertePdr();
+									if(i == 0){
+										i = 1;
+										frame.alertePdr();
+									}									
+								}
+								else {
+									i = 0;
 								}
 							}
 						}

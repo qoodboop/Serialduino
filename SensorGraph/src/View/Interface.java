@@ -81,7 +81,7 @@ public class Interface extends JFrame implements EventListener{
 		temp.setForeground(Color.RED);
 		panel_1.add(temp);
 		
-		JLabel lblHumidity = new JLabel("Humidity :");
+		JLabel lblHumidity = new JLabel("Humidit\u00E9 :");
 		lblHumidity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblHumidity.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHumidity.setForeground(Color.MAGENTA);
@@ -118,7 +118,7 @@ public class Interface extends JFrame implements EventListener{
 		button_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		panel_2.add(button_1);
 		
-		con = new JLabel("20 \u00B0C");
+		con = new JLabel("0 \u00B0C");
 		con.setForeground(Color.ORANGE);
 		con.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panel_2.add(con);
@@ -232,6 +232,31 @@ public class Interface extends JFrame implements EventListener{
 	 */
 	public void setSeries2(XYSeries series2) {
 		this.series2 = series2;
+	}
+	
+	/**
+	 * @return the button_1
+	 */
+	public JButton getButton_1() {
+		return button_1;
+	}
+	/**
+	 * @param button_1 the button_1 to set
+	 */
+	public void setButton_1(JButton button_1) {
+		this.button_1 = button_1;
+	}
+	/**
+	 * @return the button_2
+	 */
+	public JButton getButton_2() {
+		return button_2;
+	}
+	/**
+	 * @param button_2 the button_2 to set
+	 */
+	public void setButton_2(JButton button_2) {
+		this.button_2 = button_2;
 	}
 	
 	public void alertePdr() {
