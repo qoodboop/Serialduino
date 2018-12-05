@@ -139,7 +139,7 @@ public class Controller implements EventListener{
 							Scanner scanner3 = new Scanner(chosenPort.getInputStream());
 							int z = 0;
 							while(scanner3.hasNextLine()){
-								if(model.getPdr()>(model.getTemp()-1)){
+								if(model.getTemp()>30){
 									if(z == 0){
 										z = 1;
 										frame.alerteTemp();
