@@ -277,4 +277,8 @@ public class Interface extends JFrame implements EventListener{
 	public void alertePdr() {
         JOptionPane.showMessageDialog(null, "Attention, risque de condensation");
     }
+	public void alerteTemp() {
+		// TODO Auto-generated method stub
+		JOptionPane.showMessageDialog(null, "Attention, température élevée");
+	}
 }

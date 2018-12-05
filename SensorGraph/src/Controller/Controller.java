@@ -134,6 +134,24 @@ public class Controller implements EventListener{
 						}
 					};
 					thread2.start();
+					Thread thread3 = new Thread(){
+						@Override public void run() {
+							Scanner scanner3 = new Scanner(chosenPort.getInputStream());
+							int z = 0;
+							while(scanner3.hasNextLine()){
+								if(model.getPdr()>(model.getTemp()-1)){
+									if(z == 0){
+										z = 1;
+										frame.alerteTemp();
+									}									
+								}
+								else {
+									z = 0;
+								}
+							}
+						}
+					};
+					thread3.start();
 					}
 				 else {
 					// disconnect from the serial port
