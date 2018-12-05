@@ -3,7 +3,6 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.EventListener;
 import java.util.Scanner;
 
@@ -84,11 +83,13 @@ public class Controller implements EventListener{
 										model.setHum(number);
 									}
 									else {
-										System.out.println("Communication Error");
+										System.out.println("Attente d'établissement connection");
 									}
 									calculPdr(model.getTemp(), model.getHum());
-									frame.getSeries().add(x++, temp);
-									frame.getSeries2().add(x++, model.getPdr());
+									x++;
+									frame.getSeries().add(x, model.getTemp());
+									frame.getSeries2().add(x, model.getPdr());
+									frame.getSeries3().add(x, model.getCon());
 									OutputStream output = chosenPort.getOutputStream();
 									String stop = "STOP";
 									String go = "GO";
@@ -141,6 +142,7 @@ public class Controller implements EventListener{
 					frame.getButton().setText("Connect");
 					frame.getSeries().clear();
 					frame.getSeries2().clear();
+					frame.getSeries3().clear();
 					x = 0;
 				}
 			}

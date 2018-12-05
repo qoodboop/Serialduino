@@ -39,6 +39,7 @@ public class Interface extends JFrame implements EventListener{
 	private JButton button;
 	private XYSeries series;
 	private XYSeries series2;
+	private XYSeries series3;
 	private JPanel panel_2;
 	private JButton button_1;
 	private JLabel con;
@@ -84,13 +85,13 @@ public class Interface extends JFrame implements EventListener{
 		JLabel lblHumidity = new JLabel("Humidit\u00E9 :");
 		lblHumidity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblHumidity.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHumidity.setForeground(Color.MAGENTA);
+		lblHumidity.setForeground(Color.ORANGE);
 		panel_1.add(lblHumidity);
 		
 		hum = new JLabel("70 %");
 		hum.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		hum.setHorizontalAlignment(SwingConstants.CENTER);
-		hum.setForeground(Color.MAGENTA);
+		hum.setForeground(Color.ORANGE);
 		panel_1.add(hum);
 		
 		JLabel lblDewPoint = new JLabel("Point de ros\u00E9e :");
@@ -108,7 +109,7 @@ public class Interface extends JFrame implements EventListener{
 		JLabel lblConsigne = new JLabel("Consigne :");
 		lblConsigne.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConsigne.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblConsigne.setForeground(Color.ORANGE);
+		lblConsigne.setForeground(Color.GREEN);
 		panel_1.add(lblConsigne);
 		
 		panel_2 = new JPanel();
@@ -119,7 +120,7 @@ public class Interface extends JFrame implements EventListener{
 		panel_2.add(button_1);
 		
 		con = new JLabel("0 \u00B0C");
-		con.setForeground(Color.ORANGE);
+		con.setForeground(Color.GREEN);
 		con.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panel_2.add(con);
 		
@@ -129,11 +130,25 @@ public class Interface extends JFrame implements EventListener{
 		
 		series = new XYSeries("Temperature");
 		series2 = new XYSeries("Point de rosée");
+		series3 = new XYSeries("Consigne");
 		XYSeriesCollection dataset = new XYSeriesCollection(series);
 		dataset.addSeries(series2);
+		dataset.addSeries(series3);
 		JFreeChart chart = ChartFactory.createXYLineChart("DHT Temperature Readings", "Time (seconds)", "Temperature (Degree Celsius)", dataset);
 		contentPane.add(new ChartPanel(chart), BorderLayout.SOUTH);
 		pack();
+	}
+	/**
+	 * @return the series3
+	 */
+	public XYSeries getSeries3() {
+		return series3;
+	}
+	/**
+	 * @param series3 the series3 to set
+	 */
+	public void setSeries3(XYSeries series3) {
+		this.series3 = series3;
 	}
 	/**
 	 * @return the dropdown
